@@ -144,9 +144,11 @@
             <div class="content__constructor">
               <div class="pizza pizza--foundation--big-tomato">
                 <div class="pizza__wrapper">
-                  <div class="pizza__filling pizza__filling--ananas"></div>
-                  <div class="pizza__filling pizza__filling--bacon"></div>
-                  <div class="pizza__filling pizza__filling--cheddar"></div>
+                  <div
+                    v-for="filling in fillings"
+                    :key="filling.id"
+                    :class="['pizza__filling', getFillingStyle(filling)]"
+                  ></div>
                 </div>
               </div>
             </div>
@@ -164,6 +166,7 @@
 
 <script>
 import pizza from "../static/pizza.json";
+import { extractImageName } from "../common/helpers";
 export default {
   data() {
     return {
@@ -171,6 +174,20 @@ export default {
       ingredients: [],
       sauces: [],
       sizes: [],
+      fillings: [
+        // {
+        //   id: 2,
+        //   count: 1,
+        // },
+        {
+          id: 5,
+          count: 1,
+        },
+        {
+          id: 6,
+          count: 1,
+        },
+      ],
     };
   },
   methods: {
@@ -193,15 +210,15 @@ export default {
     },
     getIngredientStyle(item) {
       const image = item.image;
-      if (image) {
-        try {
-          const pathList = image.split("/");
-          const ingredient = pathList[pathList.length - 1].split(".")[0];
-          if (ingredient) return `filling--${ingredient}`;
-        } catch (error) {
-          return "";
-        }
-      }
+      const ingredientName = extractImageName(image);
+      if (ingredientName) return `filling--${ingredientName}`;
+      return "";
+    },
+    getFillingStyle(item) {
+      const index = this.ingredients.findIndex((f) => f.id === item.id);
+      const ingredientItem = this.ingredients[index];
+      const ingredientName = extractImageName(ingredientItem.image);
+      if (ingredientName) return `pizza__filling--${ingredientName}`;
       return "";
     },
   },
