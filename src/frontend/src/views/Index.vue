@@ -31,7 +31,7 @@
                 <label
                   v-for="doughItem in dough"
                   :key="doughItem.id"
-                  class="dough__input dough__input--light"
+                  :class="['dough__input', getDoughStyle(doughItem)]"
                 >
                   <input
                     type="radio"
@@ -53,7 +53,7 @@
 
               <div class="sheet__content diameter">
                 <label
-                  class="diameter__input diameter__input--small"
+                  :class="['diameter__input', getSizeStyle(size)]"
                   v-for="size in sizes"
                   :key="size.id"
                 >
@@ -98,9 +98,10 @@
                       v-for="ingredient in ingredients"
                       :key="ingredient.id"
                     >
-                      <span class="filling filling--mushrooms">{{
-                        ingredient.name
-                      }}</span>
+                      <span
+                        :class="['filling', getIngredientStyle(ingredient)]"
+                        >{{ ingredient.name }}</span
+                      >
 
                       <div class="counter counter--orange ingredients__counter">
                         <button
@@ -171,6 +172,38 @@ export default {
       sauces: [],
       sizes: [],
     };
+  },
+  methods: {
+    getDoughStyle(item) {
+      const doughChoices = {
+        Тонкое: "dough__input--light",
+        Толстое: "dough__input--large",
+      };
+      if (doughChoices[item.name]) return doughChoices[item.name];
+      return "";
+    },
+    getSizeStyle(item) {
+      const sizeChoices = {
+        1: "diameter__input--small",
+        2: "diameter__input--normal",
+        3: "diameter__input--big",
+      };
+      if (sizeChoices[item.multiplier]) return sizeChoices[item.multiplier];
+      return "";
+    },
+    getIngredientStyle(item) {
+      const image = item.image;
+      if (image) {
+        try {
+          const pathList = image.split("/");
+          const ingredient = pathList[pathList.length - 1].split(".")[0];
+          if (ingredient) return `filling--${ingredient}`;
+        } catch (error) {
+          return "";
+        }
+      }
+      return "";
+    },
   },
   mounted() {
     this.dough = pizza.dough;
