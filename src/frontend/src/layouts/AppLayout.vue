@@ -12,7 +12,7 @@
         </a>
       </div>
       <div class="header__cart">
-        <a href="cart.html">0 ₽</a>
+        <a href="cart.html">{{ summ }} ₽</a>
       </div>
       <div class="header__user">
         <a href="#" class="header__login"><span>Войти</span></a>
@@ -24,7 +24,14 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    summ: {
+      type: Number,
+      default: 0,
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped></style>

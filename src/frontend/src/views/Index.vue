@@ -1,7 +1,11 @@
 <template>
-  <app-layout>
+  <app-layout :summ="summ">
     <main class="content">
-      <builder-pizza-view :pizza="pizza" :pizza-value="pizzaValue" />
+      <builder-pizza-view
+        :pizza="pizza"
+        :pizza-value="pizzaValue"
+        :summ.sync="summ"
+      />
     </main>
   </app-layout>
 </template>
@@ -18,6 +22,7 @@ export default {
   },
   data() {
     return {
+      summ: 0,
       pizza: pizza,
       pizzaValue: {
         name: "",

@@ -239,7 +239,10 @@ export default {
     },
     addToCart() {
       this.isOpen = true;
+      this.cart.summ += this.pizzaPrice;
+      this.cart.items.push(this.pizzaValue);
       this.initValue();
+      this.$emit("update:summ", this.cart.summ);
     },
     addFilling(id) {
       const ingredientId = Number(id);
