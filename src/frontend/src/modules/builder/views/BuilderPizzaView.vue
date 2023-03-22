@@ -187,15 +187,21 @@ export default {
     },
   },
   computed: {
-    pizzaPrice() {
-      //  стоимость пиццы формируется так: мультипликатор размера х (стоимость теста + соус + ингредиенты).
-      let price = 0;
-      if (this.pizzaValue.fillings.length === 0) return 0;
+    doughPrice() {
       const dough_item = this.dough.find((f) => f.id === this.pizzaValue.dough);
-      const size_item = this.sizes.find((f) => f.id === this.pizzaValue.size);
+      return dough_item.price;
+    },
+    saucePrice() {
       const sauce_item = this.sauces.find(
         (f) => f.id === this.pizzaValue.sauce
       );
+      return sauce_item.price;
+    },
+    pizzaMultiplier() {
+      const size_item = this.sizes.find((f) => f.id === this.pizzaValue.size);
+      return size_item.multiplier;
+    },
+    ingredientsPrice() {
       // ингредиенты
       let price_ingredients = 0;
       this.pizzaValue.fillings.forEach((element) => {
@@ -205,9 +211,15 @@ export default {
         price_ingredients =
           price_ingredients + ingredient_item.price * ingredient_item.count;
       });
+      return price_ingredients;
+    },
+    pizzaPrice() {
+      //  стоимость пиццы формируется так: мультипликатор размера х (стоимость теста + соус + ингредиенты).
+      let price = 0;
+      if (this.pizzaValue.fillings.length === 0) return 0;
       price =
-        size_item.multiplier *
-        (dough_item.price + sauce_item.price + price_ingredients);
+        this.pizzaMultiplier *
+        (this.doughPrice + this.saucePrice + this.ingredientsPrice);
       return price;
     },
     pizzaFoundationStyle() {
